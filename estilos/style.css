@@ -1,0 +1,355 @@
+ * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 2rem;
+        }
+
+        /* Sección bienvenida */
+        #Bienvenida {
+            text-align: center;
+            margin: 2rem 1rem 1rem;
+        }
+
+        #Bienvenida h1 {
+            font-size: 3rem;
+            color: #80cbc4;
+            margin-bottom: 0.3rem;
+        }
+
+        #Bienvenida h3 {
+            font-weight: 400;
+            color: #b2dfdb;
+        }
+
+        /* Video */
+        #VideoPresentacion {
+            width: 90%;
+            max-width: 800px;
+            margin: 1rem auto 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        #VideoPresentacion video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Titulo ofertas */
+        h1#titulo {
+            color: #80cbc4;
+            margin: 1rem 0;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        /* Lista de juegos */
+        ul.listaJuegos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 90%;
+            max-width: 1000px;
+            padding: 0;
+            margin: 0 auto;
+        }
+
+        ul.listaJuegos li.juego {
+            background-color: #1e1e1e;
+            border: 1.5px solid #80cbc4;
+            border-radius: 10px;
+            padding: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        ul.listaJuegos li.juego:hover {
+            box-shadow: 0 0 15px #80cbc4;
+            transform: translateY(-5px);
+        }
+
+        ul.listaJuegos li.juego.sin-stock {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #ff5252;
+        }
+
+        .juego-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .titulo {
+            font-size: 1.2rem;
+            color: #a7ffeb;
+            margin-bottom: 0.5rem;
+        }
+
+        .descripcion {
+            flex-grow: 1;
+            font-size: 0.9rem;
+            color: #b2dfdb;
+            margin-bottom: 0.8rem;
+        }
+
+        .imagen {
+            width: 100%;
+            max-height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            user-select: none;
+        }
+
+        .precio {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #80cbc4;
+            text-align: right;
+        }
+
+
+        /* Contenedor general */
+.contenedor-juegos {
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto;
+}
+
+/* Ordenar juegos */
+.filtro-orden {
+    margin-bottom: 2rem;
+    text-align: right;
+}
+
+.filtro-orden select {
+    padding: 0.5rem;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #80cbc4;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+/* Mensajes del sistema */
+.AlertaBuena, .AlertaMala {
+    width: 90%;
+    max-width: 1000px;
+    margin: 1rem auto;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.AlertaBuena {
+    background-color: #2e7d32;
+    color: #ffffff;
+    border: 1px solid #66bb6a;
+}
+
+.AlertaMala {
+    background-color: #c62828;
+    color: #ffffff;
+    border: 1px solid #ef5350;
+}
+
+/* Título principal de la página */
+h1.titulo-juegos {
+    text-align: center;
+    font-size: 2rem;
+    color: #80cbc4;
+    margin-bottom: 1.5rem;
+}
+
+/* Botón Agregar al Carrito */
+.boton-agregar {
+    background-color: #80cbc4;
+    color: #121212;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.boton-agregar:hover {
+    background-color: #4db6ac;
+}
+
+
+/* Imagen de juego para que se vea completa */
+.imagen {
+    width: 100%;
+    height: 180px;
+    object-fit: contain; /* Muestra la imagen completa, sin recortar */
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    background-color: #2a2a2a; /* Fondo para que no quede vacío si la imagen tiene espacios */
+    user-select: none;
+}
+
+/* Botón agregar carrito y botón sin stock */
+button.agregar-carrito {
+    padding: 0.6rem 1rem;
+    background: linear-gradient(135deg, #3A84F4, #1E62D0);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 8px rgba(58, 132, 244, 0.6);
+}
+
+button.agregar-carrito:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1E62D0, #3A84F4);
+    box-shadow: 0 6px 12px rgba(58, 132, 244, 0.8);
+}
+
+/* Botón para juegos sin stock */
+button.agregar-carrito:disabled,
+button.agregar-carrito.sin-stock {
+    background: #c62828;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* Buscador */
+#contenedorBuscar {
+    width: 90%;
+    max-width: 1000px;
+    margin: 1.5rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#contenedorBuscar label {
+    font-size: 1rem;
+    color: #80cbc4;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+#buscar {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #80cbc4;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    transition: border-color 0.3s ease;
+}
+
+#buscar::placeholder {
+    color: #6c7a7b;
+}
+
+#buscar:focus {
+    outline: none;
+    border-color: #3A84F4;
+    box-shadow: 0 0 8px #3A84F4;
+}
+
+
+/* Estilos para el formulario de filtro */
+ #filtroForm {
+     width: 90%;
+     max-width: 1000px;
+     margin: 1.5rem auto; /* Align with the search container */
+     display: flex;
+     justify-content: flex-end; /* Align items to the right */
+     align-items: center;
+     gap: 1rem; /* Space between label, select, and button */
+     flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+ }
+
+ #filtroForm label {
+     font-size: 1rem;
+     color: #80cbc4;
+     font-weight: 600;
+     /* No margin-bottom needed due to flex alignment */
+ }
+
+ #filtroForm select {
+     padding: 0.6rem 1rem; /* Match search input padding */
+     font-size: 1rem; /* Match search input font size */
+     border-radius: 8px; /* Match search input border radius */
+     border: 1.5px solid #80cbc4; /* Match search input border */
+     background-color: #1e1e1e; /* Match search input background */
+     color: #e0e0e0; /* Match text color */
+     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+     appearance: none; /* Remove default select dropdown arrow */
+     background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Custom arrow */
+     background-repeat: no-repeat;
+     background-position: right 0.7rem top 50%; /* Adjust arrow position */
+     background-size: 1.2em auto; /* Adjust arrow size */
+     padding-right: 2.5rem; /* Make space for the custom arrow */
+     cursor: pointer;
+     flex-grow: 1; /* Allow select to grow */
+     max-width: 250px; /* Limit maximum width */
+ }
+
+ #filtroForm select:focus {
+     outline: none;
+     border-color: #3A84F4;
+     box-shadow: 0 0 8px rgba(58, 132, 244, 0.6);
+ }
+
+ #filtroForm input[type="submit"] {
+     padding: 0.7rem 1.5rem; /* Match button padding */
+     background: linear-gradient(135deg, #80cbc4, #4db6ac); /* Use a teal gradient */
+     color: #121212; /* Dark text on teal background */
+     font-weight: 600;
+     border: none;
+     border-radius: 6px; /* Match button border radius */
+     cursor: pointer;
+     transition: background 0.3s ease, box-shadow 0.3s ease;
+     font-size: 1rem; /* Match button font size */
+     box-shadow: 0 4px 8px rgba(128, 203, 196, 0.6); /* Teal box shadow */
+ }
+
+ #filtroForm input[type="submit"]:hover {
+    background: linear-gradient(135deg, #4db6ac, #80cbc4);
+    box-shadow: 0 6px 12px rgba(128, 203, 196, 0.8);
+ }
+
+ @media (max-width: 600px) {
+     #filtroForm {
+         flex-direction: column; /* Stack items on small screens */
+         align-items: flex-start; /* Align items to the left when stacked */
+         gap: 0.5rem; /* Reduce gap when stacked */
+     }
+
+     #filtroForm select {
+         width: 100%; /* Full width when stacked */
+         max-width: none; /* Remove max-width limit */
+     }
+
+     #filtroForm input[type="submit"] {
+         width: 100%; /* Full width when stacked */
+     }
+ }
