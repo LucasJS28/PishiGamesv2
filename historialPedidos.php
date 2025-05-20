@@ -1,12 +1,18 @@
-<?php 
+<?php
     session_start();
     include 'nav.php';
     require_once 'conexiones/pedidos.php';
     $pedido = new Pedidos();
+
     /* Consigue el IDUsuario cuando se realiza el inicio de sesion */
     $idUsuario = $_SESSION['idUsuario'];
-    // Llamar a la función mostrarPedidosxUsuario para obtener los pedidos del usuario
-    $pedidos = $pedido->mostrarPedidosxUsuario($idUsuario);
+
+    // Obtener los parámetros de orden y filtro de la URL
+    $orderBy = isset($_GET['order_by']) ? $_GET['order_by'] : 'fechaPedido DESC';
+    $statusFilter = isset($_GET['status_filter']) && $_GET['status_filter'] !== '' ? $_GET['status_filter'] : null;
+
+    // Llamar a la función mostrarPedidosxUsuario para obtener los pedidos del usuario con los filtros
+    $pedidos = $pedido->mostrarPedidosxUsuario($idUsuario, $orderBy, $statusFilter);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +34,56 @@
     font-size: 2rem;
     text-shadow: 0 0 8px rgba(0, 188, 212, 0.5);
 }
+
+/* Estilos para el Contenedor de Filtros */
+.filter-container {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: var(--table-bg-color, #2b2b2b);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-container label {
+    color: var(--text-color, #cccccc);
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
+
+.filter-container select {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid var(--border-color, #555);
+    background-color: var(--even-row-bg, #333);
+    color: var(--text-color, #cccccc);
+    margin-right: 1rem;
+    appearance: none; /* Remove default select arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.3%203.2-16.1%208.1-3.9%204.9-4.8%2011.3-2.6%2017.3l139%20228.8c1.9%203.2%205.2%205.2%208.8%205.2s6.9-2%208.8-5.2L289.8%2091.4c2.2-6%201.3-12.4-2.6-17.3z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+}
+
+.filter-container button {
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-color, #00bcd4);
+    color: var(--button-text-color, #1a1a1a);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-container button:hover {
+    background-color: var(--accent-hover-color, #0097a7);
+}
+
 
 /* Estilos para la Tabla de Pedidos */
 .table-container {
@@ -123,6 +179,18 @@
         margin-bottom: 1rem;
     }
 
+    .filter-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-container label,
+    .filter-container select,
+    .filter-container button {
+        margin-bottom: 0.5rem;
+        margin-right: 0;
+    }
+
     .table {
         width: 100%;
         min-width: 0; /* Permite que la tabla se reduzca */
@@ -162,35 +230,53 @@
 <body>
     <h2 class="heading">Lista de Pedidos</h2>
 
-    <!-- Primero Pregunta si hay objetos añadidos en el carrito -->
+    <div class="filter-container">
+        <form action="" method="GET">
+            <label for="order_by">Ordenar por:</label>
+            <select name="order_by" id="order_by">
+                <option value="fechaPedido DESC" <?php if ($orderBy === 'fechaPedido DESC') echo 'selected'; ?>>Fecha (Más Nuevo)</option>
+                <option value="fechaPedido ASC" <?php if ($orderBy === 'fechaPedido ASC') echo 'selected'; ?>>Fecha (Más Antiguo)</option>
+            </select>
+
+            <label for="status_filter">Estado:</label>
+            <select name="status_filter" id="status_filter">
+                <option value="">Todos</option>
+                <option value="Completado" <?php if ($statusFilter === 'Completado') echo 'selected'; ?>>Completado</option>
+                <option value="Pendiente" <?php if ($statusFilter === 'Pendiente') echo 'selected'; ?>>Pendiente</option>
+            </select>
+            <button type="submit">Aplicar Filtros</button>
+        </form>
+    </div>
+
     <?php
     if (!empty($pedidos)) {
     ?>
-        <table class="table">
-            <thead>
-                <tr class="table-row">
-                    <th class="table-header">ID del Pedido</th>
-                    <th class="table-header">Fecha del Pedido</th>
-                    <th class="table-header">Estado</th>
-                    <th class="table-header">Detalles</th>
-                    <th class="table-header">Total</th>
-                </tr>
-            </thead>
-            <!-- Crea un ciclo para buscar cada uno de los Detalles de los pedidos -->
-            <tbody>
-                <?php foreach ($pedidos as $pedido) { ?>
+        <div class="table-container">
+            <table class="table">
+                <thead>
                     <tr class="table-row">
-                        <td class="table-cell"><?php echo $pedido['idPedido']; ?></td>
-                        <td class="table-cell"><?php echo $pedido['fechaPedido']; ?></td>
-                        <td class="table-cell"><?php echo $pedido['estado']; ?></td>
-                        <td class="table-cell"><?php echo $pedido['detalles']; ?></td>
-                        <td class="table-cell"><?php echo number_format($pedido['total'], 0, '', '.'); ?></td>
+                        <th class="table-header">ID del Pedido</th>
+                        <th class="table-header">Fecha del Pedido</th>
+                        <th class="table-header">Estado</th>
+                        <th class="table-header">Detalles</th>
+                        <th class="table-header">Total</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($pedidos as $pedido) { ?>
+                        <tr class="table-row">
+                            <td class="table-cell"><?php echo $pedido['idPedido']; ?></td>
+                            <td class="table-cell"><?php echo $pedido['fechaPedido']; ?></td>
+                            <td class="table-cell"><?php echo $pedido['estado']; ?></td>
+                            <td class="table-cell"><?php echo $pedido['detalles']; ?></td>
+                            <td class="table-cell"><?php echo number_format($pedido['total'], 0, '', '.'); ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
     <?php } else { ?>
-        <p class="centered-text">No hay pedidos disponibles.</p>
+        <p class="centered-text">No hay pedidos disponibles con los filtros seleccionados.</p>
     <?php } ?>
 
     <a class="button" href="carrito.php">Volver al Carrito de Compras</a>
